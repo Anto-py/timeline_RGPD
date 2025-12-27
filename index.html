@@ -312,19 +312,6 @@
       40%, 80% { transform: translateX(5px); }
     }
 
-    .card-level {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.7rem;
-      color: var(--retro-paper);
-      background: var(--retro-teal);
-      padding: 2px 8px;
-      border-radius: 10px;
-      display: inline-block;
-      margin-bottom: 6px;
-    }
-
-    .card-level.level-2 { background: var(--retro-orange); }
-    .card-level.level-3 { background: var(--retro-jaune); color: var(--retro-ink); }
 
     .card-title {
       font-family: 'Oswald', sans-serif;
@@ -349,7 +336,11 @@
     }
 
     .situation-card.placed .card-situation {
-      display: none;
+      display: block;
+    }
+
+    .situation-card.placed {
+      height: auto;
     }
 
     /* === FEEDBACK === */
@@ -829,7 +820,6 @@
     const situations = [
       {
         id: 1,
-        level: 1,
         title: "Collecte massive sans permission",
         icon: "📢",
         correctZone: "2015",
@@ -843,7 +833,6 @@
       },
       {
         id: 2,
-        level: 1,
         title: "Faire supprimer une photo gênante",
         icon: "🗑️",
         correctZone: "2024",
@@ -857,7 +846,6 @@
       },
       {
         id: 3,
-        level: 2,
         title: "Contester une décision d'IA",
         icon: "🤖",
         correctZone: "2024",
@@ -871,7 +859,6 @@
       },
       {
         id: 4,
-        level: 2,
         title: "Données intimes envoyées en secret",
         icon: "🌍",
         correctZone: "2015",
@@ -885,7 +872,6 @@
       },
       {
         id: 5,
-        level: 3,
         title: "Enfant sur les réseaux sans contrôle",
         icon: "📱",
         correctZone: "2015",
@@ -899,7 +885,6 @@
       },
       {
         id: 6,
-        level: 3,
         title: "Récupérer ses données pour partir",
         icon: "📦",
         correctZone: "2024",
@@ -913,7 +898,6 @@
       },
       {
         id: 7,
-        level: 3,
         title: "Fuite de données cachée",
         icon: "🔓",
         correctZone: "2015",
@@ -927,7 +911,6 @@
       },
       {
         id: 8,
-        level: 3,
         title: "Être informé du profilage",
         icon: "🎭",
         correctZone: "2024",
@@ -985,11 +968,7 @@
       card.dataset.id = situation.id;
       card.dataset.correctZone = situation.correctZone;
       
-      const levelClass = situation.level === 1 ? '' : situation.level === 2 ? 'level-2' : 'level-3';
-      const levelText = situation.level === 1 ? 'NIVEAU 1' : situation.level === 2 ? 'NIVEAU 2' : 'PIÈGE';
-      
       card.innerHTML = `
-        <span class="card-level ${levelClass}">${levelText}</span>
         <div class="card-title">
           <span class="card-icon">${situation.icon}</span>
           ${situation.title}
