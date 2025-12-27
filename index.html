@@ -336,11 +336,31 @@
     }
 
     .situation-card.placed .card-situation {
-      display: block;
+      display: none;
     }
 
     .situation-card.placed {
       height: auto;
+      padding: 8px 12px;
+      min-width: auto;
+      max-width: none;
+      flex: none;
+      border-radius: 16px 4px 16px 4px;
+    }
+
+    .situation-card.placed .card-title {
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+
+    /* Texte blanc dans la zone noire (2015) */
+    .zone-2015 .situation-card.placed {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--sepia);
+    }
+
+    .zone-2015 .situation-card.placed .card-title {
+      color: var(--retro-paper);
     }
 
     /* === FEEDBACK === */
