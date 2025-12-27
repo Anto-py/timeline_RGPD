@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline RGPD — Avant / Après</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* === VARIABLES RETROFUTURISTES === */
+    :root {
+      --retro-teal: #127676;
+      --retro-orange: #E4632E;
+      --retro-jaune: #E3A535;
+      --retro-ink: #0D1617;
+      --retro-paper: #F2EFE6;
+      
+      /* Monde 2015 */
+      --sepia: #8B8680;
+      --marron-rouille: #A0522D;
+      --fond-2015: #3D3A36;
+      
+      /* États */
+      --retro-state-success: var(--retro-teal);
+      --retro-state-error: var(--retro-orange);
+      --retro-state-warning: var(--retro-jaune);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--retro-ink);
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    /* === CADRE PAGE ART NOUVEAU === */
+    .page-frame {
+      background: var(--retro-paper);
+      border: 4px solid var(--retro-orange);
+      position: relative;
+      min-height: calc(100vh - 24px);
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .corner-flourish {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      color: var(--retro-teal);
+      opacity: 0.5;
+      font-size: 40px;
+      line-height: 1;
+    }
+    .corner-flourish.top-left { top: 8px; left: 8px; }
+    .corner-flourish.top-right { top: 8px; right: 8px; transform: scaleX(-1); }
+    .corner-flourish.bottom-left { bottom: 8px; left: 8px; transform: scaleY(-1); }
+    .corner-flourish.bottom-right { bottom: 8px; right: 8px; transform: scale(-1); }
+
+    /* === HEADER === */
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--retro-teal);
+    }
+
+    h1 {
+      font-family: 'Anton', Impact, sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--retro-teal);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      color: var(--retro-ink);
+      opacity: 0.8;
+    }
+
+    /* === SCORE BAR === */
+    .score-bar {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .score-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      padding: 6px 16px;
+      border-radius: 50px;
+      border: 2px solid var(--retro-teal);
+      background: var(--retro-paper);
+    }
+
+    .score-item .value {
+      color: var(--retro-orange);
+      font-size: 1.3rem;
+    }
+
+    /* === CONTENEUR PRINCIPAL === */
+    .game-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+      min-height: 400px;
+    }
+
+    /* === ZONES DE DROP === */
+    .drop-zone {
+      border-radius: 16px;
+      padding: 15px;
+      min-height: 350px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .drop-zone.drag-over {
+      transform: scale(1.02);
+    }
+
+    .zone-2015 {
+      background: linear-gradient(135deg, var(--fond-2015), #2A2825);
+      border: 3px solid var(--sepia);
+    }
+
+    .zone-2015.drag-over {
+      border-color: var(--marron-rouille);
+      box-shadow: 0 0 20px rgba(160, 82, 45, 0.4);
+    }
+
+    .zone-2024 {
+      background: linear-gradient(135deg, var(--retro-teal), #0A4A4A);
+      border: 3px solid var(--retro-orange);
+    }
+
+    .zone-2024.drag-over {
+      border-color: var(--retro-jaune);
+      box-shadow: 0 0 20px rgba(227, 165, 53, 0.4);
+    }
+
+    .zone-header {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+    }
+
+    .zone-2015 .zone-header {
+      background: var(--sepia);
+      color: var(--retro-paper);
+    }
+
+    .zone-2024 .zone-header {
+      background: var(--retro-orange);
+      color: var(--retro-paper);
+    }
+
+    .zone-description {
+      font-size: 0.85rem;
+      text-align: center;
+      margin-bottom: 12px;
+      opacity: 0.9;
+    }
+
+    .zone-2015 .zone-description { color: var(--sepia); }
+    .zone-2024 .zone-description { color: var(--retro-paper); }
+
+    .drop-area {
+      min-height: 200px;
+      border: 2px dashed rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* === TIMELINE CENTRALE === */
+    .timeline {
+      width: 80px;
+      background: linear-gradient(to bottom, var(--sepia) 0%, var(--retro-jaune) 50%, var(--retro-teal) 100%);
+      border-radius: 40px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 10px;
+    }
+
+    .timeline-marker {
+      background: var(--retro-orange);
+      color: var(--retro-paper);
+      padding: 12px 8px;
+      border-radius: 8px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.9rem;
+      text-align: center;
+      line-height: 1.2;
+      border: 3px solid var(--retro-paper);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .timeline-marker .date {
+      font-size: 1.1rem;
+      display: block;
+    }
+
+    .timeline::before,
+    .timeline::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      background: var(--retro-paper);
+    }
+
+    .timeline::before {
+      top: 10px;
+      height: 30%;
+    }
+
+    .timeline::after {
+      bottom: 10px;
+      height: 30%;
+    }
+
+    /* === CARTES SITUATIONS === */
+    .cards-container {
+      margin-bottom: 20px;
+    }
+
+    .cards-header {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      text-align: center;
+      color: var(--retro-teal);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .cards-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .situation-card {
+      background: var(--retro-paper);
+      border: 3px solid var(--retro-teal);
+      border-radius: 24px 8px 24px 8px;
+      box-shadow: inset 0 0 0 2px var(--retro-orange);
+      padding: 12px 16px;
+      cursor: grab;
+      transition: all 0.2s ease;
+      max-width: 320px;
+      min-width: 280px;
+      flex: 1 1 280px;
+      user-select: none;
+    }
+
+    .situation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: inset 0 0 0 2px var(--retro-orange), 0 6px 20px rgba(18, 118, 118, 0.3);
+    }
+
+    .situation-card.dragging {
+      opacity: 0.6;
+      cursor: grabbing;
+      transform: rotate(3deg);
+    }
+
+    .situation-card.placed {
+      max-width: 100%;
+      min-width: auto;
+      margin: 0;
+    }
+
+    .situation-card.correct {
+      border-color: var(--retro-teal);
+      background: rgba(18, 118, 118, 0.1);
+    }
+
+    .situation-card.incorrect {
+      border-color: var(--retro-orange);
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .card-level {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.7rem;
+      color: var(--retro-paper);
+      background: var(--retro-teal);
+      padding: 2px 8px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .card-level.level-2 { background: var(--retro-orange); }
+    .card-level.level-3 { background: var(--retro-jaune); color: var(--retro-ink); }
+
+    .card-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      color: var(--retro-ink);
+      margin-bottom: 4px;
+    }
+
+    .card-icon {
+      font-size: 1.2rem;
+      margin-right: 6px;
+    }
+
+    .card-situation {
+      font-size: 0.85rem;
+      color: var(--retro-ink);
+      opacity: 0.85;
+      margin-top: 8px;
+      line-height: 1.4;
+      border-top: 1px dashed var(--retro-teal);
+      padding-top: 8px;
+    }
+
+    .situation-card.placed .card-situation {
+      display: none;
+    }
+
+    /* === FEEDBACK === */
+    .feedback-panel {
+      background: var(--retro-paper);
+      border: 3px solid var(--retro-teal);
+      border-radius: 16px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .feedback-panel.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .feedback-panel.success {
+      border-left: 6px solid var(--retro-teal);
+      background: rgba(18, 118, 118, 0.08);
+    }
+
+    .feedback-panel.error {
+      border-left: 6px solid var(--retro-orange);
+      background: rgba(228, 99, 46, 0.08);
+    }
+
+    .feedback-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .feedback-panel.success .feedback-title { color: var(--retro-teal); }
+    .feedback-panel.error .feedback-title { color: var(--retro-orange); }
+
+    .feedback-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--retro-ink);
+    }
+
+    .feedback-article {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(18, 118, 118, 0.1);
+      border-radius: 8px;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    .feedback-article strong {
+      color: var(--retro-teal);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .comparison-box {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .comparison-box.box-2015 {
+      background: var(--fond-2015);
+      color: var(--retro-paper);
+      border: 2px solid var(--sepia);
+    }
+
+    .comparison-box.box-2024 {
+      background: rgba(18, 118, 118, 0.15);
+      color: var(--retro-ink);
+      border: 2px solid var(--retro-teal);
+    }
+
+    .comparison-header {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .comparison-box.box-2015 .comparison-header {
+      color: var(--sepia);
+    }
+
+    .comparison-box.box-2024 .comparison-header {
+      color: var(--retro-teal);
+    }
+
+    .explanation-text {
+      font-weight: 500;
+      margin-top: 12px;
+      padding: 10px;
+      background: rgba(227, 165, 53, 0.15);
+      border-radius: 8px;
+      border-left: 3px solid var(--retro-jaune);
+    }
+
+    .consequence-text {
+      margin-top: 12px;
+      font-size: 0.9rem;
+      color: var(--retro-ink);
+      opacity: 0.9;
+      padding: 10px;
+      background: rgba(18, 118, 118, 0.08);
+      border-radius: 8px;
+    }
+
+    /* === BOUTON PILL === */
+    .retro-btn-pill {
+      display: inline-flex;
+      border-radius: 50px;
+      border: 3px solid var(--retro-teal);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .retro-btn-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(18, 118, 118, 0.3);
+    }
+
+    .retro-btn-pill-text {
+      background: var(--retro-jaune);
+      color: var(--retro-ink);
+      padding: 12px 24px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+    }
+
+    .retro-btn-pill-icon {
+      background: var(--retro-orange);
+      color: var(--retro-paper);
+      width: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+
+    /* === ÉCRAN SYNTHÈSE === */
+    .synthesis-screen {
+      display: none;
+      text-align: center;
+    }
+
+    .synthesis-screen.show {
+      display: block;
+    }
+
+    .synthesis-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 2rem;
+      color: var(--retro-teal);
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .final-score {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: var(--retro-orange);
+      margin-bottom: 15px;
+    }
+
+    .game-stats {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      color: var(--retro-ink);
+      margin-bottom: 20px;
+    }
+
+    .game-stats p {
+      margin: 5px 0;
+    }
+
+    .game-stats strong {
+      color: var(--retro-teal);
+    }
+
+    .most-debated {
+      background: rgba(18, 118, 118, 0.1);
+      border: 2px solid var(--retro-teal);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+    }
+
+    .most-debated h3 {
+      font-family: 'Oswald', sans-serif;
+      color: var(--retro-teal);
+      margin-bottom: 12px;
+    }
+
+    .debate-question {
+      background: var(--retro-orange);
+      color: var(--retro-paper);
+      padding: 20px;
+      border-radius: 16px;
+      margin-top: 25px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .debate-question h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .debate-question p {
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+
+    /* === SÉPARATEUR ART NOUVEAU === */
+    .retro-separator {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 25px 0;
+      color: var(--retro-teal);
+    }
+
+    .retro-separator::before,
+    .retro-separator::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--retro-teal) 20%, var(--retro-teal) 80%, transparent);
+    }
+
+    .retro-separator .flourish {
+      font-size: 1.5rem;
+      opacity: 0.7;
+    }
+
+    /* === INSTRUCTIONS === */
+    .instructions {
+      text-align: center;
+      padding: 12px;
+      background: rgba(18, 118, 118, 0.08);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border: 2px solid var(--retro-teal);
+    }
+
+    .instructions p {
+      font-family: 'Oswald', sans-serif;
+      color: var(--retro-ink);
+    }
+
+    .instructions strong {
+      color: var(--retro-orange);
+    }
+
+    /* === PROGRESS BAR === */
+    .progress-container {
+      margin-bottom: 15px;
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: rgba(18, 118, 118, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid var(--retro-teal);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--retro-teal), var(--retro-orange), var(--retro-jaune));
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .progress-text {
+      font-family: 'Bebas Neue', sans-serif;
+      text-align: center;
+      margin-top: 5px;
+      color: var(--retro-ink);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 900px) {
+      .game-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+
+      .timeline {
+        width: 100%;
+        height: 60px;
+        border-radius: 12px;
+        flex-direction: row;
+        padding: 10px 20px;
+        order: -1;
+      }
+
+      .timeline::before,
+      .timeline::after {
+        display: none;
+      }
+
+      .drop-zone {
+        min-height: 200px;
+      }
+
+      .situation-card {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .page-frame {
+        padding: 12px;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .corner-flourish {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-frame">
+    <!-- Ornements Art Nouveau -->
+    <span class="corner-flourish top-left">❧</span>
+    <span class="corner-flourish top-right">❧</span>
+    <span class="corner-flourish bottom-left">❧</span>
+    <span class="corner-flourish bottom-right">❧</span>
+
+    <!-- Phase de jeu -->
+    <div id="game-phase">
+      <header>
+        <h1>Timeline RGPD</h1>
+        <p class="subtitle">Avant ou après le 25 mai 2018 ? Place chaque situation dans le bon monde.</p>
+      </header>
+
+      <div class="score-bar">
+        <div class="score-item">Score : <span class="value" id="score">0</span> / 8</div>
+        <div class="score-item">Essais : <span class="value" id="attempts">0</span></div>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <p class="progress-text"><span id="placed-count">0</span> / 8 situations placées</p>
+      </div>
+
+      <div class="instructions">
+        <p>🎯 <strong>Glisse-dépose</strong> chaque carte vers le monde où cette situation serait possible ou légale.</p>
+      </div>
+
+      <div class="game-container">
+        <!-- Zone 2015 -->
+        <div class="drop-zone zone-2015" id="zone-2015">
+          <div class="zone-header">🕰️ MONDE 2015</div>
+          <p class="zone-description">Avant le RGPD — données sans protection</p>
+          <div class="drop-area" id="drop-2015"></div>
+        </div>
+
+        <!-- Timeline centrale -->
+        <div class="timeline">
+          <div class="timeline-marker">
+            RGPD
+            <span class="date">25/05/2018</span>
+          </div>
+        </div>
+
+        <!-- Zone 2024 -->
+        <div class="drop-zone zone-2024" id="zone-2024">
+          <div class="zone-header">🚀 MONDE 2024</div>
+          <p class="zone-description">Avec le RGPD — tes droits sont protégés</p>
+          <div class="drop-area" id="drop-2024"></div>
+        </div>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback-panel" id="feedback-panel">
+        <div class="feedback-title" id="feedback-title"></div>
+        <div class="feedback-text" id="feedback-text"></div>
+        <div class="feedback-article" id="feedback-article"></div>
+      </div>
+
+      <!-- Cartes à placer -->
+      <div class="cards-container">
+        <div class="retro-separator"><span class="flourish">✿</span></div>
+        <p class="cards-header">📋 Situations à classer</p>
+        <div class="cards-grid" id="cards-grid"></div>
+      </div>
+    </div>
+
+    <!-- Écran de synthèse -->
+    <div id="synthesis-screen" class="synthesis-screen">
+      <h2 class="synthesis-title">🎉 BRAVO ! Tu as terminé !</h2>
+      
+      <div class="final-score">
+        Score final : <span id="final-score">0</span> / 8
+      </div>
+
+      <div id="game-stats" class="game-stats"></div>
+
+      <div class="most-debated" id="most-debated">
+        <h3>📊 Les situations qui ont posé le plus de difficultés :</h3>
+        <ul id="debated-list"></ul>
+      </div>
+
+      <div class="debate-question">
+        <h3>💬 Question pour le débat collectif</h3>
+        <p>« Si le RGPD disparaissait demain, laquelle de ces 8 situations vous inquiéterait le plus ? »</p>
+      </div>
+
+      <div class="retro-separator"><span class="flourish">❀</span></div>
+
+      <div style="text-align: center; margin-top: 20px;">
+        <button class="retro-btn-pill" onclick="restartGame()">
+          <span class="retro-btn-pill-text">RECOMMENCER</span>
+          <span class="retro-btn-pill-icon">↻</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === DONNÉES DES SITUATIONS ===
+    const situations = [
+      {
+        id: 1,
+        level: 1,
+        title: "Pub ciblée sans consentement",
+        icon: "📢",
+        correctZone: "2024",
+        situation: "Tu scrolles Instagram pendant 5 minutes. Le lendemain, tu reçois des pubs pour exactement les produits dont tu parlais avec tes amis. Coïncidence ?",
+        description2015: "Les plateformes collectent tout : localisation, contacts, historique de navigation, conversations... et revendent ces données aux annonceurs. Aucune case à cocher, aucune question posée. Tu es le produit.",
+        description2024: "Bannière cookies obligatoire avec vraies options (pas juste « Accepter »). Tu peux refuser le suivi publicitaire. Les entreprises doivent prouver ton consentement explicite.",
+        article: "Art. 6 RGPD",
+        articleTitle: "Base légale du traitement",
+        explanation: "Depuis le RGPD, toute utilisation de tes données personnelles nécessite une base légale, souvent ton consentement explicite. Fini la pub sans ta permission !",
+        consequence: "Sans RGPD : une étude de 2018 montrait que Facebook avait 98 points de données sur chaque utilisateur, vendus à 52 000 annonceurs différents."
+      },
+      {
+        id: 2,
+        level: 1,
+        title: "Droit à l'oubli numérique",
+        icon: "🗑️",
+        correctZone: "2024",
+        situation: "Une photo gênante de toi circule depuis le collège. Trois ans plus tard, elle apparaît encore quand on google ton nom. Tu voudrais qu'elle disparaisse.",
+        description2015: "Aucun recours légal simple. Tu peux supplier le site de retirer la photo, mais rien ne l'y oblige. Google indexe tout, pour toujours. Ton passé numérique te colle à la peau.",
+        description2024: "Tu peux exiger la suppression auprès du site ET du moteur de recherche. Si l'info n'est plus pertinente ou était publiée sans ton accord, ils doivent obéir sous 30 jours.",
+        article: "Art. 17 RGPD",
+        articleTitle: "Droit à l'effacement",
+        explanation: "Le RGPD te donne le droit de demander la suppression de tes données quand elles ne sont plus pertinentes. Tu peux faire disparaître ce qui te gêne !",
+        consequence: "Google a reçu plus de 1,5 million de demandes de déréférencement depuis 2014. En France, 52% sont acceptées."
+      },
+      {
+        id: 3,
+        level: 2,
+        title: "IA qui recrute",
+        icon: "🤖",
+        correctZone: "2024",
+        situation: "Tu postules pour un job d'été. Ton CV est filtré par une IA avant même qu'un humain le voie. Tu reçois un refus automatique. Pourquoi ? Mystère total.",
+        description2015: "Les algorithmes de tri de CV sont des boîtes noires. Amazon avait une IA qui pénalisait automatiquement les CV contenant le mot « femme » (club d'échecs féminin, lycée de filles...). Personne n'était obligé de t'expliquer.",
+        description2024: "Tu as le droit de savoir qu'une IA a pris la décision, de comprendre sa logique, de contester, et d'exiger qu'un humain réexamine ton dossier.",
+        article: "Art. 22 RGPD",
+        articleTitle: "Décisions individuelles automatisées",
+        explanation: "Si une IA prend une décision qui t'affecte (refus de crédit, rejet de CV...), tu as le droit d'exiger une explication humaine et de contester.",
+        consequence: "En 2018, Amazon a dû abandonner son IA de recrutement car elle discriminait systématiquement les femmes — entraînée sur 10 ans de CV majoritairement masculins."
+      },
+      {
+        id: 4,
+        level: 2,
+        title: "Données santé à l'étranger",
+        icon: "🌍",
+        correctZone: "2024",
+        situation: "Tu utilises une appli de suivi de règles ou de santé mentale. Tes données les plus intimes (cycles, humeurs, symptômes) sont stockées sur des serveurs à l'autre bout du monde.",
+        description2015: "Tes données peuvent être transférées n'importe où : Chine, Russie, USA... sans que tu le saches. Les lois locales s'appliquent : aux USA, les forces de l'ordre peuvent y accéder facilement.",
+        description2024: "L'appli doit t'informer où vont tes données. Les transferts hors UE nécessitent des garanties équivalentes au RGPD. Tu peux refuser.",
+        article: "Art. 44-49 RGPD",
+        articleTitle: "Transferts vers pays tiers",
+        explanation: "Tes données ne peuvent plus partir n'importe où dans le monde. Les entreprises doivent t'informer et garantir leur protection même à l'étranger.",
+        consequence: "Après l'annulation de Roe v. Wade aux USA (2022), des données d'applis de suivi menstruel ont été utilisées comme preuves dans des procès. Le RGPD protège les Européennes de ce scénario."
+      },
+      {
+        id: 5,
+        level: 3,
+        title: "Inscription TikTok à 10 ans",
+        icon: "📱",
+        correctZone: "2024",
+        situation: "Ta petite sœur de 11 ans veut absolument TikTok comme ses copines. Elle ment sur son âge et s'inscrit en 2 minutes. Personne ne vérifie rien.",
+        description2015: "Aucune vérification d'âge sérieuse. Les conditions d'utilisation font 50 pages que personne ne lit. Un enfant de 8 ans peut s'inscrire et être exposé à du contenu inapproprié et du ciblage publicitaire.",
+        description2024: "Consentement parental obligatoire pour les moins de 15 ans (en France). Les plateformes doivent mettre en place des mécanismes de vérification. Amendes massives en cas de manquement.",
+        article: "Art. 8 RGPD",
+        articleTitle: "Conditions applicables au consentement des enfants",
+        explanation: "Pour protéger les mineurs, le RGPD impose le consentement des parents pour les services numériques avant 15 ans (en France). Les plateformes doivent vérifier.",
+        consequence: "TikTok a été condamné à 345 millions € d'amende en 2023 par l'Irlande pour avoir mal protégé les données des mineurs européens."
+      },
+      {
+        id: 6,
+        level: 3,
+        title: "Quitter une plateforme",
+        icon: "📦",
+        correctZone: "2024",
+        situation: "Tu en as marre d'Instagram et tu veux passer à une autre appli. Problème : 5 ans de photos, stories, messages... Tu ne veux pas tout perdre.",
+        description2015: "Tes données sont prisonnières. Tu peux supprimer ton compte, mais pas récupérer tes contenus dans un format utilisable ailleurs. Les plateformes te gardent captif grâce à ton historique.",
+        description2024: "Tu peux télécharger TOUTES tes données dans un format standard (JSON, CSV). Certaines applis proposent même le transfert direct vers un concurrent. Tes données t'appartiennent.",
+        article: "Art. 20 RGPD",
+        articleTitle: "Droit à la portabilité des données",
+        explanation: "Tu n'es plus prisonnier d'une plateforme ! Tu peux récupérer toutes tes données dans un format réutilisable et les transférer ailleurs.",
+        consequence: "Grâce à ce droit, des services comme « Data Transfer Project » (Google, Apple, Facebook, Twitter) permettent maintenant de migrer directement ses photos entre plateformes."
+      },
+      {
+        id: 7,
+        level: 3,
+        title: "Piratage caché",
+        icon: "🔓",
+        correctZone: "2024",
+        situation: "Le site où tu as créé un compte se fait pirater. Tes mots de passe, ton email, peut-être même tes coordonnées bancaires sont dans la nature. Tu l'apprends... 8 mois plus tard par la presse.",
+        description2015: "Aucune obligation de prévenir les victimes. Yahoo a attendu 3 ans pour révéler un piratage de 3 milliards de comptes. Uber a payé les hackers pour garder le silence sur une fuite de 57 millions d'utilisateurs.",
+        description2024: "L'entreprise doit notifier l'autorité (CNIL) en 72h maximum. Si le risque est élevé pour toi, elle doit te prévenir directement et rapidement pour que tu changes tes mots de passe.",
+        article: "Art. 33-34 RGPD",
+        articleTitle: "Notification d'une violation de données",
+        explanation: "Fini les fuites cachées ! Si tes données sont compromises, l'entreprise doit prévenir les autorités en 72h et toi rapidement si le risque est élevé.",
+        consequence: "En 2023, la CNIL a reçu 4 668 notifications de violations de données en France. Sans le RGPD, la plupart seraient restées secrètes."
+      },
+      {
+        id: 8,
+        level: 3,
+        title: "Profilage psychologique par IA",
+        icon: "🎭",
+        correctZone: "2024",
+        situation: "Un chatbot d'orientation scolaire te pose des questions « pour mieux te connaître ». En réalité, il analyse ton vocabulaire, ta vitesse de frappe, tes hésitations pour établir ton profil psychologique.",
+        description2015: "Cambridge Analytica a profilé 87 millions d'utilisateurs Facebook via un simple quiz de personnalité, sans jamais révéler le vrai usage des données. Résultat : manipulation électorale à grande échelle.",
+        description2024: "Le service doit t'informer AVANT qu'il y a du profilage, t'expliquer la logique utilisée, te dire quelles conséquences ça a pour toi, et te laisser refuser.",
+        article: "Art. 13-14 RGPD",
+        articleTitle: "Informations à fournir — transparence",
+        explanation: "Quand une IA te profile ou analyse ton comportement, tu dois être informé clairement de ce qu'elle fait, pourquoi, et comment elle fonctionne.",
+        consequence: "Le scandale Cambridge Analytica (2018) a directement influencé l'application stricte du RGPD et mené à une amende record de 5 milliards $ pour Facebook aux USA."
+      }
+    ];
+
+    // === ÉTAT DU JEU ===
+    let gameState = {
+      score: 0,
+      attempts: 0,
+      placed: 0,
+      errors: {},  // { situationId: nombreErreurs }
+      startTime: Date.now()
+    };
+
+    // === INITIALISATION ===
+    function initGame() {
+      const cardsGrid = document.getElementById('cards-grid');
+      cardsGrid.innerHTML = '';
+      
+      // Mélanger les situations
+      const shuffled = [...situations].sort(() => Math.random() - 0.5);
+      
+      shuffled.forEach(situation => {
+        const card = createCard(situation);
+        cardsGrid.appendChild(card);
+      });
+
+      // Initialiser les zones de drop
+      setupDropZones();
+      
+      // Reset état
+      gameState = {
+        score: 0,
+        attempts: 0,
+        placed: 0,
+        errors: {},
+        startTime: Date.now()
+      };
+      
+      updateUI();
+    }
+
+    function createCard(situation) {
+      const card = document.createElement('div');
+      card.className = 'situation-card';
+      card.draggable = true;
+      card.dataset.id = situation.id;
+      card.dataset.correctZone = situation.correctZone;
+      
+      const levelClass = situation.level === 1 ? '' : situation.level === 2 ? 'level-2' : 'level-3';
+      const levelText = situation.level === 1 ? 'NIVEAU 1' : situation.level === 2 ? 'NIVEAU 2' : 'PIÈGE';
+      
+      card.innerHTML = `
+        <span class="card-level ${levelClass}">${levelText}</span>
+        <div class="card-title">
+          <span class="card-icon">${situation.icon}</span>
+          ${situation.title}
+        </div>
+        <p class="card-situation">${situation.situation}</p>
+      `;
+
+      // Events drag
+      card.addEventListener('dragstart', handleDragStart);
+      card.addEventListener('dragend', handleDragEnd);
+      
+      // Touch events pour mobile
+      card.addEventListener('touchstart', handleTouchStart, { passive: false });
+      card.addEventListener('touchmove', handleTouchMove, { passive: false });
+      card.addEventListener('touchend', handleTouchEnd);
+
+      return card;
+    }
+
+    function setupDropZones() {
+      const zones = document.querySelectorAll('.drop-zone');
+      
+      zones.forEach(zone => {
+        zone.addEventListener('dragover', handleDragOver);
+        zone.addEventListener('dragleave', handleDragLeave);
+        zone.addEventListener('drop', handleDrop);
+      });
+    }
+
+    // === DRAG & DROP ===
+    let draggedCard = null;
+
+    function handleDragStart(e) {
+      draggedCard = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', this.dataset.id);
+    }
+
+    function handleDragEnd(e) {
+      this.classList.remove('dragging');
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('drag-over');
+      });
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      this.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      this.classList.remove('drag-over');
+      
+      if (!draggedCard) return;
+      
+      const zoneId = this.id;
+      const targetZone = zoneId.includes('2015') ? '2015' : '2024';
+      const correctZone = draggedCard.dataset.correctZone;
+      const situationId = parseInt(draggedCard.dataset.id);
+      const situation = situations.find(s => s.id === situationId);
+      
+      gameState.attempts++;
+      
+      if (targetZone === correctZone) {
+        // Correct !
+        handleCorrectPlacement(draggedCard, situation, this);
+      } else {
+        // Incorrect
+        handleIncorrectPlacement(draggedCard, situation);
+      }
+      
+      updateUI();
+      draggedCard = null;
+    }
+
+    // === TOUCH EVENTS (Mobile) ===
+    let touchStartX, touchStartY;
+    let currentTouch = null;
+
+    function handleTouchStart(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      currentTouch = this;
+      this.classList.add('dragging');
+    }
+
+    function handleTouchMove(e) {
+      e.preventDefault();
+      if (!currentTouch) return;
+      
+      const touch = e.touches[0];
+      const moveX = touch.clientX - touchStartX;
+      const moveY = touch.clientY - touchStartY;
+      
+      currentTouch.style.transform = `translate(${moveX}px, ${moveY}px) rotate(3deg)`;
+      
+      // Vérifier le survol des zones
+      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('drag-over');
+      });
+      
+      if (elementBelow) {
+        const zone = elementBelow.closest('.drop-zone');
+        if (zone) zone.classList.add('drag-over');
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (!currentTouch) return;
+      
+      currentTouch.classList.remove('dragging');
+      currentTouch.style.transform = '';
+      
+      const touch = e.changedTouches[0];
+      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('drag-over');
+      });
+      
+      if (elementBelow) {
+        const zone = elementBelow.closest('.drop-zone');
+        if (zone) {
+          // Simuler un drop
+          draggedCard = currentTouch;
+          handleDrop.call(zone, { preventDefault: () => {} });
+        }
+      }
+      
+      currentTouch = null;
+    }
+
+    // === GESTION DES PLACEMENTS ===
+    function handleCorrectPlacement(card, situation, zone) {
+      gameState.score++;
+      gameState.placed++;
+      
+      card.classList.add('correct', 'placed');
+      card.draggable = false;
+      
+      // Déplacer dans la zone
+      const dropArea = zone.querySelector('.drop-area');
+      dropArea.appendChild(card);
+      
+      showFeedback(true, situation);
+      
+      if (gameState.placed === 8) {
+        setTimeout(showSynthesis, 1500);
+      }
+    }
+
+    function handleIncorrectPlacement(card, situation) {
+      // Enregistrer l'erreur
+      if (!gameState.errors[situation.id]) {
+        gameState.errors[situation.id] = 0;
+      }
+      gameState.errors[situation.id]++;
+      
+      card.classList.add('incorrect');
+      setTimeout(() => card.classList.remove('incorrect'), 500);
+      
+      showFeedback(false, situation);
+    }
+
+    function showFeedback(isCorrect, situation) {
+      const panel = document.getElementById('feedback-panel');
+      const title = document.getElementById('feedback-title');
+      const text = document.getElementById('feedback-text');
+      const article = document.getElementById('feedback-article');
+      
+      panel.className = 'feedback-panel show ' + (isCorrect ? 'success' : 'error');
+      
+      if (isCorrect) {
+        title.textContent = '✓ Correct !';
+        text.innerHTML = `
+          <div class="comparison-grid">
+            <div class="comparison-box box-2015">
+              <div class="comparison-header">🕰️ AVANT (2015)</div>
+              <p>${situation.description2015}</p>
+            </div>
+            <div class="comparison-box box-2024">
+              <div class="comparison-header">🚀 APRÈS (2024)</div>
+              <p>${situation.description2024}</p>
+            </div>
+          </div>
+          <p class="explanation-text">${situation.explanation}</p>
+          ${situation.consequence ? `<p class="consequence-text">📊 <strong>Le savais-tu ?</strong> ${situation.consequence}</p>` : ''}
+        `;
+        article.innerHTML = `<strong>${situation.article}</strong> — ${situation.articleTitle}`;
+      } else {
+        title.textContent = '✗ Réfléchis encore...';
+        text.innerHTML = `<p>Cette situation illustre un changement apporté par le RGPD. Pose-toi la question : <strong>est-ce que cette situation me donne plus de contrôle sur mes données, ou moins ?</strong></p>
+        <p style="margin-top: 10px;"><em>💡 Indice : le monde 2024 (avec RGPD) te donne toujours plus de droits et de protection.</em></p>`;
+        article.innerHTML = '';
+      }
+      
+      // Auto-hide après 6 secondes si correct (plus de temps pour lire), 4 si incorrect
+      const hideDelay = isCorrect ? 8000 : 4000;
+      setTimeout(() => {
+        if (panel.classList.contains('show')) {
+          panel.classList.remove('show');
+        }
+      }, hideDelay);
+    }
+
+    // === UI UPDATES ===
+    function updateUI() {
+      document.getElementById('score').textContent = gameState.score;
+      document.getElementById('attempts').textContent = gameState.attempts;
+      document.getElementById('placed-count').textContent = gameState.placed;
+      document.getElementById('progress-fill').style.width = (gameState.placed / 8 * 100) + '%';
+    }
+
+    // === ÉCRAN DE SYNTHÈSE ===
+    function showSynthesis() {
+      document.getElementById('game-phase').style.display = 'none';
+      document.getElementById('synthesis-screen').classList.add('show');
+      
+      document.getElementById('final-score').textContent = gameState.score;
+      
+      // Trouver les situations les plus difficiles
+      const debatedList = document.getElementById('debated-list');
+      debatedList.innerHTML = '';
+      
+      const errorEntries = Object.entries(gameState.errors)
+        .filter(([id, count]) => count > 0)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+      
+      if (errorEntries.length === 0) {
+        debatedList.innerHTML = '<li style="color: var(--retro-teal); font-size: 1.1rem;">🎯 Impressionnant ! Aucune erreur ! Tu maîtrises déjà bien tes droits numériques.</li>';
+      } else {
+        errorEntries.forEach(([id, count]) => {
+          const situation = situations.find(s => s.id === parseInt(id));
+          const li = document.createElement('li');
+          li.style.marginBottom = '15px';
+          li.style.textAlign = 'left';
+          li.innerHTML = `
+            <strong style="color: var(--retro-orange);">${situation.icon} ${situation.title}</strong> 
+            <span style="color: var(--retro-ink); opacity: 0.7;">(${count} tentative${count > 1 ? 's' : ''} incorrecte${count > 1 ? 's' : ''})</span>
+            <br>
+            <span style="font-size: 0.9rem; color: var(--retro-ink);">→ ${situation.article} : ${situation.articleTitle}</span>
+          `;
+          debatedList.appendChild(li);
+        });
+      }
+      
+      // Calculer le temps total
+      const totalTime = Math.round((Date.now() - gameState.startTime) / 1000);
+      const minutes = Math.floor(totalTime / 60);
+      const seconds = totalTime % 60;
+      
+      // Ajouter les stats de temps
+      const statsDiv = document.getElementById('game-stats');
+      if (statsDiv) {
+        statsDiv.innerHTML = `
+          <p>⏱️ Temps total : <strong>${minutes}min ${seconds}s</strong></p>
+          <p>🎯 Précision : <strong>${Math.round(gameState.score / gameState.attempts * 100)}%</strong> (${gameState.score} correct sur ${gameState.attempts} essais)</p>
+        `;
+      }
+    }
+
+    function restartGame() {
+      document.getElementById('synthesis-screen').classList.remove('show');
+      document.getElementById('game-phase').style.display = 'block';
+      
+      // Vider les zones de drop
+      document.getElementById('drop-2015').innerHTML = '';
+      document.getElementById('drop-2024').innerHTML = '';
+      
+      // Réinitialiser le feedback
+      document.getElementById('feedback-panel').className = 'feedback-panel';
+      
+      initGame();
+    }
+
+    // === DÉMARRAGE ===
+    document.addEventListener('DOMContentLoaded', initGame);
+  </script>
+</body>
+</html>
