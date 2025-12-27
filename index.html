@@ -949,8 +949,6 @@
       startTime: Date.now()
     };
 
-    let feedbackTimeout = null;  // Stocke le timeout du feedback pour pouvoir l'annuler
-
     // === INITIALISATION ===
     function initGame() {
       const cardsGrid = document.getElementById('cards-grid');
@@ -1196,28 +1194,10 @@
         <p style="margin-top: 10px;"><em>💡 Indice : le monde 2024 (avec RGPD) te donne toujours plus de droits et de protection.</em></p>`;
         article.innerHTML = '';
       }
-      
-      // Annuler le timeout précédent s'il existe
-      if (feedbackTimeout) {
-        clearTimeout(feedbackTimeout);
-      }
-
-      // Auto-hide après 8 secondes si correct (plus de temps pour lire), 4 si incorrect
-      const hideDelay = isCorrect ? 8000 : 4000;
-      feedbackTimeout = setTimeout(() => {
-        if (panel.classList.contains('show')) {
-          panel.classList.remove('show');
-        }
-      }, hideDelay);
     }
 
     function closeFeedback() {
-      const panel = document.getElementById('feedback-panel');
-      if (feedbackTimeout) {
-        clearTimeout(feedbackTimeout);
-        feedbackTimeout = null;
-      }
-      panel.classList.remove('show');
+      document.getElementById('feedback-panel').classList.remove('show');
     }
 
     // === UI UPDATES ===
