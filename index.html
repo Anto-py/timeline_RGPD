@@ -475,6 +475,27 @@
       border-radius: 8px;
     }
 
+    .feedback-close-btn {
+      display: block;
+      margin: 15px auto 0;
+      padding: 10px 25px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      background: var(--retro-teal);
+      color: var(--retro-paper);
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .feedback-close-btn:hover {
+      background: var(--retro-orange);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(228, 99, 46, 0.3);
+    }
+
     /* === BOUTON PILL === */
     .retro-btn-pill {
       display: inline-flex;
@@ -760,6 +781,7 @@
         <div class="feedback-title" id="feedback-title"></div>
         <div class="feedback-text" id="feedback-text"></div>
         <div class="feedback-article" id="feedback-article"></div>
+        <button class="feedback-close-btn" onclick="closeFeedback()">🎮 Retour au jeu</button>
       </div>
 
       <!-- Cartes à placer -->
@@ -926,6 +948,8 @@
       errors: {},  // { situationId: nombreErreurs }
       startTime: Date.now()
     };
+
+    let feedbackTimeout = null;  // Stocke le timeout du feedback pour pouvoir l'annuler
 
     // === INITIALISATION ===
     function initGame() {
@@ -1173,13 +1197,27 @@
         article.innerHTML = '';
       }
       
-      // Auto-hide après 6 secondes si correct (plus de temps pour lire), 4 si incorrect
+      // Annuler le timeout précédent s'il existe
+      if (feedbackTimeout) {
+        clearTimeout(feedbackTimeout);
+      }
+
+      // Auto-hide après 8 secondes si correct (plus de temps pour lire), 4 si incorrect
       const hideDelay = isCorrect ? 8000 : 4000;
-      setTimeout(() => {
+      feedbackTimeout = setTimeout(() => {
         if (panel.classList.contains('show')) {
           panel.classList.remove('show');
         }
       }, hideDelay);
+    }
+
+    function closeFeedback() {
+      const panel = document.getElementById('feedback-panel');
+      if (feedbackTimeout) {
+        clearTimeout(feedbackTimeout);
+        feedbackTimeout = null;
+      }
+      panel.classList.remove('show');
     }
 
     // === UI UPDATES ===
