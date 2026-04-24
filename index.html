@@ -1,12 +1,13 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Timeline RGPD — Avant / Après</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Timeline RGPD — Avant / Après</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Bebas+Neue&amp;family=Oswald:wght@400;500;600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
     /* === VARIABLES RETROFUTURISTES === */
     :root {
       --retro-teal: #127676;
@@ -738,108 +739,95 @@
   </style>
 </head>
 <body>
-  <div class="page-frame">
-    <!-- Ornements Art Nouveau -->
-    <span class="corner-flourish top-left">❧</span>
-    <span class="corner-flourish top-right">❧</span>
-    <span class="corner-flourish bottom-left">❧</span>
-    <span class="corner-flourish bottom-right">❧</span>
-
-    <!-- Phase de jeu -->
-    <div id="game-phase">
-      <header>
-        <h1>Timeline RGPD</h1>
-        <p class="subtitle">Avant ou après le 25 mai 2018 ? Place chaque situation dans le bon monde.</p>
-      </header>
-
-      <div class="score-bar">
-        <div class="score-item">Score : <span class="value" id="score">0</span> / 8</div>
-        <div class="score-item">Essais : <span class="value" id="attempts">0</span></div>
-      </div>
-
-      <div class="progress-container">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <p class="progress-text"><span id="placed-count">0</span> / 8 situations placées</p>
-      </div>
-
-      <div class="instructions">
-        <p>🎯 <strong>Glisse-dépose</strong> chaque carte vers le monde où cette situation serait possible ou légale.</p>
-      </div>
-
-      <div class="game-container">
-        <!-- Zone 2015 -->
-        <div class="drop-zone zone-2015" id="zone-2015">
-          <div class="zone-header">🕰️ MONDE 2015</div>
-          <p class="zone-description">Avant le RGPD — données sans protection</p>
-          <div class="drop-area" id="drop-2015"></div>
-        </div>
-
-        <!-- Timeline centrale -->
-        <div class="timeline">
-          <div class="timeline-marker">
+<div class="page-frame">
+<!-- Ornements Art Nouveau -->
+<span class="corner-flourish top-left">❧</span>
+<span class="corner-flourish top-right">❧</span>
+<span class="corner-flourish bottom-left">❧</span>
+<span class="corner-flourish bottom-right">❧</span>
+<!-- Phase de jeu -->
+<div id="game-phase">
+<header>
+<h1>Timeline RGPD</h1>
+<p class="subtitle">Avant ou après le 25 mai 2018 ? Place chaque situation dans le bon monde.</p>
+</header>
+<div class="score-bar">
+<div class="score-item">Score : <span class="value" id="score">0</span> / 8</div>
+<div class="score-item">Essais : <span class="value" id="attempts">0</span></div>
+</div>
+<div class="progress-container">
+<div class="progress-bar">
+<div class="progress-fill" id="progress-fill"></div>
+</div>
+<p class="progress-text"><span id="placed-count">0</span> / 8 situations placées</p>
+</div>
+<div class="instructions">
+<p>🎯 <strong>Glisse-dépose</strong> chaque carte vers le monde où cette situation serait possible ou légale.</p>
+</div>
+<div class="game-container">
+<!-- Zone 2015 -->
+<div class="drop-zone zone-2015" id="zone-2015">
+<div class="zone-header">🕰️ MONDE 2015</div>
+<p class="zone-description">Avant le RGPD — données sans protection</p>
+<div class="drop-area" id="drop-2015"></div>
+</div>
+<!-- Timeline centrale -->
+<div class="timeline">
+<div class="timeline-marker">
             RGPD
             <span class="date">25/05/2018</span>
-          </div>
-        </div>
-
-        <!-- Zone 2024 -->
-        <div class="drop-zone zone-2024" id="zone-2024">
-          <div class="zone-header">🚀 MONDE 2024</div>
-          <p class="zone-description">Avec le RGPD — tes droits sont protégés</p>
-          <div class="drop-area" id="drop-2024"></div>
-        </div>
-      </div>
-
-      <!-- Feedback -->
-      <div class="feedback-panel" id="feedback-panel">
-        <div class="feedback-title" id="feedback-title"></div>
-        <div class="feedback-text" id="feedback-text"></div>
-        <div class="feedback-article" id="feedback-article"></div>
-        <button class="feedback-close-btn" onclick="closeFeedback()">🎮 Retour au jeu</button>
-      </div>
-
-      <!-- Cartes à placer -->
-      <div class="cards-container">
-        <div class="retro-separator"><span class="flourish">✿</span></div>
-        <p class="cards-header">📋 Situations à classer</p>
-        <div class="cards-grid" id="cards-grid"></div>
-      </div>
-    </div>
-
-    <!-- Écran de synthèse -->
-    <div id="synthesis-screen" class="synthesis-screen">
-      <h2 class="synthesis-title">🎉 BRAVO ! Tu as terminé !</h2>
-      
-      <div class="final-score">
+</div>
+</div>
+<!-- Zone 2024 -->
+<div class="drop-zone zone-2024" id="zone-2024">
+<div class="zone-header">🚀 MONDE 2024</div>
+<p class="zone-description">Avec le RGPD — tes droits sont protégés</p>
+<div class="drop-area" id="drop-2024"></div>
+</div>
+</div>
+<!-- Feedback -->
+<div class="feedback-panel" id="feedback-panel">
+<div class="feedback-title" id="feedback-title"></div>
+<div class="feedback-text" id="feedback-text"></div>
+<div class="feedback-article" id="feedback-article"></div>
+<button class="feedback-close-btn" onclick="closeFeedback()">🎮 Retour au jeu</button>
+</div>
+<!-- Cartes à placer -->
+<div class="cards-container">
+<div class="retro-separator"><span class="flourish">✿</span></div>
+<p class="cards-header">📋 Situations à classer</p>
+<div class="cards-grid" id="cards-grid"></div>
+</div>
+</div>
+<!-- Écran de synthèse -->
+<div class="synthesis-screen" id="synthesis-screen">
+<h2 class="synthesis-title">🎉 BRAVO ! Tu as terminé !</h2>
+<div class="final-score">
         Score final : <span id="final-score">0</span> / 8
       </div>
-
-      <div id="game-stats" class="game-stats"></div>
-
-      <div class="most-debated" id="most-debated">
-        <h3>📊 Les situations qui ont posé le plus de difficultés :</h3>
-        <ul id="debated-list"></ul>
-      </div>
-
-      <div class="debate-question">
-        <h3>💬 Question pour le débat collectif</h3>
-        <p>« Si le RGPD disparaissait demain, laquelle de ces 8 situations vous inquiéterait le plus ? »</p>
-      </div>
-
-      <div class="retro-separator"><span class="flourish">❀</span></div>
-
-      <div style="text-align: center; margin-top: 20px;">
-        <button class="retro-btn-pill" onclick="restartGame()">
-          <span class="retro-btn-pill-text">RECOMMENCER</span>
-          <span class="retro-btn-pill-icon">↻</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script>
+<div class="game-stats" id="game-stats"></div>
+<div class="most-debated" id="most-debated">
+<h3>📊 Les situations qui ont posé le plus de difficultés :</h3>
+<ul id="debated-list"></ul>
+</div>
+<div class="debate-question">
+<h3>💬 Question pour le débat collectif</h3>
+<p>« Si le RGPD disparaissait demain, laquelle de ces 8 situations vous inquiéterait le plus ? »</p>
+</div>
+<div class="retro-separator"><span class="flourish">❀</span></div>
+<div style="text-align: center; margin-top: 20px;">
+<button class="retro-btn-pill" onclick="restartGame()">
+<span class="retro-btn-pill-text">RECOMMENCER</span>
+<span class="retro-btn-pill-icon">↻</span>
+</button>
+</div>
+</div>
+<div class="ab-attribution" style="text-align:center;margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.25);font-size:0.8rem;opacity:0.65;">
+<a href="https://www.linkedin.com/in/antonin-bareau/" rel="noopener" style="font-weight:bold;color:inherit;text-decoration:none;" target="_blank">Antonin Bareau</a>
+   — 
+  <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener" style="color:inherit;text-decoration:none;" target="_blank">Licence CC BY-SA 4.0</a>
+</div></div>
+<script>
     // === DONNÉES DES SITUATIONS ===
     // 4 situations "2015" (pratiques abusives d'avant) + 4 situations "2024" (nouveaux droits)
     const situations = [
@@ -1188,11 +1176,6 @@
               <div class="comparison-header">🚀 APRÈS (2024)</div>
               <p>${situation.description2024}</p>
             </div>
-          <div class="ab-attribution" style="text-align:center;margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(128,128,128,0.25);font-size:0.8rem;opacity:0.65;">
-  <a href="https://www.linkedin.com/in/antonin-bareau/" target="_blank" rel="noopener" style="font-weight:bold;color:inherit;text-decoration:none;">Antonin Bareau</a>
-  &nbsp;&mdash;&nbsp;
-  <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Licence CC BY-SA 4.0</a>
-</div>
 </div>
           <p class="explanation-text">${situation.explanation}</p>
           ${situation.consequence ? `<p class="consequence-text">📊 <strong>Le savais-tu ?</strong> ${situation.consequence}</p>` : ''}
@@ -1284,6 +1267,5 @@
     // === DÉMARRAGE ===
     document.addEventListener('DOMContentLoaded', initGame);
   </script>
-
 </body>
 </html>
